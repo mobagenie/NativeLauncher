@@ -1,3 +1,4 @@
+#define ANDROID_NATIVE_APP_GLUE_IMPLEMENTATION
 #include <android_native_app_glue.h>
 #include <android/log.h>
 #include <jni.h>
