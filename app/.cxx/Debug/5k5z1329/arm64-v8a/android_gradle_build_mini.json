@@ -22,12 +22,6 @@
       "abi": "arm64-v8a",
       "output": "/workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so",
       "runtimeFiles": []
-    },
-    "android_native_app_glue::@6890427a1f51a3e7e1df": {
-      "artifactName": "android_native_app_glue",
-      "abi": "arm64-v8a",
-      "output": "/workspaces/NativeLauncher/app/.cxx/Debug/5k5z1329/arm64-v8a/libandroid_native_app_glue.a",
-      "runtimeFiles": []
     }
   }
 }

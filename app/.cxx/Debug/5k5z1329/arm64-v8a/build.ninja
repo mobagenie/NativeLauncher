@@ -47,7 +47,7 @@ cmake_ninja_workdir = /workspaces/NativeLauncher/app/.cxx/Debug/5k5z1329/arm64-v
 #############################################
 # Order-only phony target for launcher
 
-build cmake_object_order_depends_target_launcher: phony || cmake_object_order_depends_target_android_native_app_glue
+build cmake_object_order_depends_target_launcher: phony || CMakeFiles/launcher.dir
 
 build CMakeFiles/launcher.dir/main.cpp.o: CXX_COMPILER__launcher_Debug /workspaces/NativeLauncher/app/src/main/cpp/main.cpp || cmake_object_order_depends_target_launcher
   DEFINES = -Dlauncher_EXPORTS
@@ -57,6 +57,14 @@ build CMakeFiles/launcher.dir/main.cpp.o: CXX_COMPILER__launcher_Debug /workspac
   OBJECT_DIR = CMakeFiles/launcher.dir
   OBJECT_FILE_DIR = CMakeFiles/launcher.dir
 
+build CMakeFiles/launcher.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o: C_COMPILER__launcher_Debug /home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c || cmake_object_order_depends_target_launcher
+  DEFINES = -Dlauncher_EXPORTS
+  DEP_FILE = CMakeFiles/launcher.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o.d
+  FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC
+  INCLUDES = -I/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue
+  OBJECT_DIR = CMakeFiles/launcher.dir
+  OBJECT_FILE_DIR = CMakeFiles/launcher.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue
+
 
 # =============================================================================
 # Link build statements for SHARED_LIBRARY target launcher
@@ -65,10 +73,10 @@ build CMakeFiles/launcher.dir/main.cpp.o: CXX_COMPILER__launcher_Debug /workspac
 #############################################
 # Link the shared library /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so
 
-build /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so: CXX_SHARED_LIBRARY_LINKER__launcher_Debug CMakeFiles/launcher.dir/main.cpp.o | libandroid_native_app_glue.a /home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/libandroid.so /home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/liblog.so || libandroid_native_app_glue.a
+build /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so: CXX_SHARED_LIBRARY_LINKER__launcher_Debug CMakeFiles/launcher.dir/main.cpp.o CMakeFiles/launcher.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o | /home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/libandroid.so /home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/liblog.so
   LANGUAGE_COMPILE_FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++17 -Os -fno-exceptions -fno-rtti -fno-limit-debug-info
   LINK_FLAGS = -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--fatal-warnings -Wl,--gc-sections -Wl,--no-undefined -Qunused-arguments
-  LINK_LIBRARIES = libandroid_native_app_glue.a  /home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/libandroid.so  /home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/liblog.so  -latomic -lm
+  LINK_LIBRARIES = /home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/libandroid.so  /home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/21/liblog.so  -latomic -lm
   OBJECT_DIR = CMakeFiles/launcher.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -76,37 +84,6 @@ build /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/
   SONAME_FLAG = -Wl,-soname,
   TARGET_FILE = /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so
   TARGET_PDB = launcher.so.dbg
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target android_native_app_glue
-
-
-#############################################
-# Order-only phony target for android_native_app_glue
-
-build cmake_object_order_depends_target_android_native_app_glue: phony || CMakeFiles/android_native_app_glue.dir
-
-build CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o: C_COMPILER__android_native_app_glue_Debug /home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c || cmake_object_order_depends_target_android_native_app_glue
-  DEP_FILE = CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o.d
-  FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC
-  OBJECT_DIR = CMakeFiles/android_native_app_glue.dir
-  OBJECT_FILE_DIR = CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target android_native_app_glue
-
-
-#############################################
-# Link the static library libandroid_native_app_glue.a
-
-build libandroid_native_app_glue.a: C_STATIC_LIBRARY_LINKER__android_native_app_glue_Debug CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o
-  LANGUAGE_COMPILE_FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info
-  OBJECT_DIR = CMakeFiles/android_native_app_glue.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = libandroid_native_app_glue.a
-  TARGET_PDB = android_native_app_glue.a.dbg
 
 
 #############################################
@@ -134,8 +111,6 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
-build android_native_app_glue: phony libandroid_native_app_glue.a
-
 build launcher: phony /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so
 
 build liblauncher.so: phony /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so
@@ -148,7 +123,7 @@ build liblauncher.so: phony /workspaces/NativeLauncher/app/build/intermediates/c
 #############################################
 # Folder: /workspaces/NativeLauncher/app/.cxx/Debug/5k5z1329/arm64-v8a
 
-build all: phony /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so libandroid_native_app_glue.a
+build all: phony /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so
 
 # =============================================================================
 # Built-in targets

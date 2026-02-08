@@ -15,8 +15,7 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0,
-						1
+						0
 					]
 				}
 			],
@@ -31,8 +30,7 @@
 					"name" : "launcher",
 					"targetIndexes" : 
 					[
-						0,
-						1
+						0
 					]
 				}
 			],
@@ -40,15 +38,8 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "android_native_app_glue::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-android_native_app_glue-Debug-3b0ea9fd4f780b6f902e.json",
-					"name" : "android_native_app_glue",
-					"projectIndex" : 0
-				},
-				{
-					"directoryIndex" : 0,
 					"id" : "launcher::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-launcher-Debug-01ec239ba0ea1e7d6b2d.json",
+					"jsonFile" : "target-launcher-Debug-c4603214b8edb9f97968.json",
 					"name" : "launcher",
 					"projectIndex" : 0
 				}

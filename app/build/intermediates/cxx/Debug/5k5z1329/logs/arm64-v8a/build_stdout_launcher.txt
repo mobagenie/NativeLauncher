@@ -1,5 +1,4 @@
 ninja: Entering directory `/workspaces/NativeLauncher/app/.cxx/Debug/5k5z1329/arm64-v8a'
-[1/4] Building C object CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o
-[2/4] Linking C static library libandroid_native_app_glue.a
-[3/4] Building CXX object CMakeFiles/launcher.dir/main.cpp.o
-[4/4] Linking CXX shared library /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so
+[1/3] Building C object CMakeFiles/launcher.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o
+[2/3] Building CXX object CMakeFiles/launcher.dir/main.cpp.o
+[3/3] Linking CXX shared library /workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so
