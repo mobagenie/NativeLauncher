@@ -16,8 +16,8 @@
 13-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:5:5-37
 14        <activity
 14-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:8:5-22:16
-15            android:name="android.app.NativeActivity"
-15-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:9:9-50
+15            android:name="com.nativelauncher.app.TextActivity"
+15-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:9:9-37
 16            android:exported="true" >
 16-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:10:9-32
 17            <meta-data
