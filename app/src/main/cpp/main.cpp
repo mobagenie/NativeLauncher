@@ -16,6 +16,10 @@ static bool running=true;
 static bool fontReady=false;
 static bool loaded=false;
 
+float scrollY = 0;
+float lastTouchY = 0;
+bool dragging=false;
+
 stbtt_fontinfo font;
 unsigned char ttf[1<<20];
 
@@ -60,7 +64,6 @@ void loadApps(){
 
   while(std::getline(f,line)){
    if(line.empty()) continue;
-
    size_t p=line.find('|');
    if(p==std::string::npos) continue;
 
@@ -73,10 +76,7 @@ void loadApps(){
   f.close();
  }
 
- // fallback
  if(apps.empty()){
-  LOG("setting.txt kosong, pakai default");
-
   apps={
    {"Settings","com.android.settings"},
    {"Files","com.android.documentsui"},
@@ -135,17 +135,26 @@ void draw(){
  int cols=3;
  int cw=buf.width/cols;
 
+ int contentHeight=((apps.size()+2)/3)*220;
+
+ if(scrollY>0) scrollY=0;
+ if(scrollY < buf.height-contentHeight)
+  scrollY = buf.height-contentHeight;
+
  for(int i=0;i<apps.size();i++){
 
   int r=i/cols;
   int c=i%cols;
 
   int sx=c*cw+20;
-  int sy=r*220+40;
+  int sy=r*220+40 + scrollY;
+
+  if(sy<-200 || sy>buf.height) continue;
 
   for(int y=sy;y<sy+120;y++)
    for(int x=sx;x<sx+cw-40;x++)
-    p[y*buf.stride+x]=0xffffffff;
+    if(y>=0 && y<buf.height)
+     p[y*buf.stride+x]=0xffffffff;
 
   drawText(p,buf.stride,sx+10,sy+150,apps[i].name.c_str());
  }
@@ -161,7 +170,6 @@ void launch(android_app* app,const char* pkg){
  app->activity->vm->AttachCurrentThread(&e,nullptr);
 
  jclass c=e->GetObjectClass(app->activity->clazz);
-
  jmethodID pm=e->GetMethodID(c,"getPackageManager","()Landroid/content/pm/PackageManager;");
  jobject m=e->CallObjectMethod(app->activity->clazz,pm);
 
@@ -183,13 +191,26 @@ void launch(android_app* app,const char* pkg){
 
 int32_t input(android_app* app,AInputEvent* ev){
 
- if(!window) return 0;
  if(AInputEvent_getType(ev)!=AINPUT_EVENT_TYPE_MOTION) return 0;
 
- if((AMotionEvent_getAction(ev)&AMOTION_EVENT_ACTION_MASK)==AMOTION_EVENT_ACTION_DOWN){
+ int act=AMotionEvent_getAction(ev)&AMOTION_EVENT_ACTION_MASK;
+ float x=AMotionEvent_getX(ev,0);
+ float y=AMotionEvent_getY(ev,0);
 
-  float x=AMotionEvent_getX(ev,0);
-  float y=AMotionEvent_getY(ev,0);
+ if(act==AMOTION_EVENT_ACTION_DOWN){
+  lastTouchY=y;
+  dragging=true;
+ }
+
+ if(act==AMOTION_EVENT_ACTION_MOVE && dragging){
+  float dy=y-lastTouchY;
+  scrollY+=dy;
+  lastTouchY=y;
+ }
+
+ if(act==AMOTION_EVENT_ACTION_UP){
+
+  dragging=false;
 
   int cw=ANativeWindow_getWidth(window)/3;
 
@@ -197,7 +218,7 @@ int32_t input(android_app* app,AInputEvent* ev){
 
    int r=i/3,c=i%3;
    int sx=c*cw+20;
-   int sy=r*220+40;
+   int sy=r*220+40+scrollY;
 
    if(x>=sx&&x<=sx+cw-40&&y>=sy&&y<=sy+120)
     launch(app,apps[i].pkg.c_str());
