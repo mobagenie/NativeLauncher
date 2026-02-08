@@ -41,14 +41,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "android_native_app_glue::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-android_native_app_glue-Debug-3b0ea9fd4f780b6f902e.json",
+					"jsonFile" : "target-android_native_app_glue-Debug-62dea0d5fedf6dee2ff4.json",
 					"name" : "android_native_app_glue",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "launcher::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-launcher-Debug-84647f05dcace9df0f21.json",
+					"jsonFile" : "target-launcher-Debug-37cbaff52fbcde820f39.json",
 					"name" : "launcher",
 					"projectIndex" : 0
 				}
