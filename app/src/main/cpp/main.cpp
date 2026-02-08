@@ -56,8 +56,7 @@ void draw(){
 void launchApp(android_app* app,const char* pkg){
     JavaVM* vm=app->activity->vm;
     JNIEnv* env=nullptr;
-
-    vm->AttachCurrentThread((void**)&env,nullptr);
+vm->AttachCurrentThread(&env,nullptr);
 
     jobject act=app->activity->clazz;
     jclass cls=env->GetObjectClass(act);
