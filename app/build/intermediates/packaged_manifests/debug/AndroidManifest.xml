@@ -11,8 +11,10 @@
         android:extractNativeLibs="true"
         android:hasCode="true"
         android:label="LiteLauncher" >
+
+        <!-- HARUS MainActivity bukan NativeActivity -->
         <activity
-            android:name="android.app.NativeActivity"
+            android:name="com.nativelauncher.app.MainActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:label="LiteLauncher"
