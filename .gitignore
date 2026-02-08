@@ -1,1 +1,8 @@
 build/*
+.gradle/*
+gradle/*
+app/src/*
+app/build.gradle
+app/build/intermediates/*
+app/build/tmp/*
+.cxx
