@@ -1,45 +1,47 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-23:12
-INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-23:12
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-25:12
+INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-25:12
 	package
 		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:2:5-37
 		INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:11-69
 application
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:5-22:19
-INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:5-22:19
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-24:15
+INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-24:15
 	android:extractNativeLibs
 		INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml
 	android:label
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:18-46
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:5:5-37
+	android:icon
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:6:5-39
 activity#android.app.NativeActivity
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:6:9-20:20
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:8:5-22:16
 	android:exported
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:8:13-36
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:10:9-32
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:7:13-54
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:9:9-50
 meta-data#android.app.lib_name
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:10:13-12:43
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:12:9-14:39
 	android:value
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:12:17-41
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:14:13-37
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:11:17-52
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:13:13-48
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.DEFAULT+category:name:android.intent.category.HOME
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:14:13-18:29
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:16:9-20:25
 action#android.intent.action.MAIN
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:15:17-68
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:13-64
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:15:25-66
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:21-62
 category#android.intent.category.HOME
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:16:17-72
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:13-68
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:16:27-70
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:23-66
 category#android.intent.category.DEFAULT
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:17-75
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:13-71
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:27-73
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:23-69
 uses-sdk
 INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml
