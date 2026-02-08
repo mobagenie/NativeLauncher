@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-   >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34"/>
 
@@ -7,19 +6,20 @@
         android:label="LiteLauncher"
         android:hasCode="true">
 
-        <!-- HARUS MainActivity bukan NativeActivity -->
         <activity
-            android:name=".MainActivity"
+            android:name="android.app.NativeActivity"
             android:label="LiteLauncher"
             android:launchMode="singleTask"
             android:exported="true"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait">
 
+            <!-- Nama library native -->
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="launcher" />
 
+            <!-- Launcher sebagai HOME -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.HOME"/>
@@ -29,4 +29,5 @@
         </activity>
 
     </application>
+
 </manifest>
