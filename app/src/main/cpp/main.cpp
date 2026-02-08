@@ -118,10 +118,10 @@ void draw() {
 
     int w = buf.width;
     int cols = 5;           // 5 kolom
-    int padding = 8;        // jarak antar kotak
+    int padding = 13;        // jarak antar kotak
     int itemW = w / cols - padding;
-    int itemH = 60;         // kotak kecil
-    int labelH = 18;        // tinggi label
+    int itemH = 30;         // kotak kecil
+    int labelH = 22;        // tinggi label
     int rowHeight = itemH + labelH + padding;
 
     // batasi max 50 app
