@@ -2,20 +2,17 @@
 #include "stb_truetype.h"
 
 #include <android_native_app_glue.h>
-#include <android/log.h>
 #include <unistd.h>
 #include <vector>
 
-static ANativeWindow* gWindow=nullptr;
+static ANativeWindow* window=nullptr;
 static bool running=true;
+static bool fontReady=false;
 
 stbtt_fontinfo font;
 unsigned char ttf[1<<20];
 
-struct App{
-    const char* name;
-    const char* pkg;
-};
+struct App{ const char* name; const char* pkg; };
 
 std::vector<App> apps={
  {"Chrome","com.android.chrome"},
@@ -28,8 +25,9 @@ std::vector<App> apps={
 };
 
 void drawText(uint32_t* p,int w,int x,int y,const char* t){
+ if(!fontReady) return;
 
- float s=stbtt_ScaleForPixelHeight(&font,32);
+ float s=stbtt_ScaleForPixelHeight(&font,28);
  int cx=x;
 
  while(*t){
@@ -40,8 +38,9 @@ void drawText(uint32_t* p,int w,int x,int y,const char* t){
   stbtt_GetCodepointBitmapBox(&font,*t,s,s,&x0,&y0,&x1,&y1);
 
   int bw=x1-x0,bh=y1-y0;
-  std::vector<unsigned char> b(bw*bh);
+  if(bw<=0||bh<=0){ t++; continue; }
 
+  std::vector<unsigned char> b(bw*bh);
   stbtt_MakeCodepointBitmap(&font,b.data(),bw,bh,bw,s,s,*t);
 
   for(int j=0;j<bh;j++)
@@ -55,14 +54,12 @@ void drawText(uint32_t* p,int w,int x,int y,const char* t){
 }
 
 void draw(){
-
- if(!gWindow) return;
+ if(!window) return;
 
  ANativeWindow_Buffer buf;
- if(ANativeWindow_lock(gWindow,&buf,nullptr)) return;
+ if(ANativeWindow_lock(window,&buf,nullptr)!=0) return;
 
  uint32_t* p=(uint32_t*)buf.bits;
-
  memset(p,0,buf.height*buf.stride*4);
 
  int cols=3;
@@ -80,21 +77,18 @@ void draw(){
   drawText(p,buf.stride,sx+15,sy+150,apps[i].name);
  }
 
- ANativeWindow_unlockAndPost(gWindow);
+ ANativeWindow_unlockAndPost(window);
 }
 
 void launch(android_app* app,const char* pkg){
-
  JNIEnv* e;
  app->activity->vm->AttachCurrentThread(&e,nullptr);
 
  jclass c=e->GetObjectClass(app->activity->clazz);
-
  jmethodID pm=e->GetMethodID(c,"getPackageManager","()Landroid/content/pm/PackageManager;");
  jobject m=e->CallObjectMethod(app->activity->clazz,pm);
 
  jclass pc=e->GetObjectClass(m);
-
  jmethodID gi=e->GetMethodID(pc,"getLaunchIntentForPackage","(Ljava/lang/String;)Landroid/content/Intent;");
  jstring j=e->NewStringUTF(pkg);
 
@@ -109,6 +103,7 @@ void launch(android_app* app,const char* pkg){
 }
 
 int32_t input(android_app* app,AInputEvent* ev){
+ if(!window) return 0;
 
  if(AInputEvent_getType(ev)!=AINPUT_EVENT_TYPE_MOTION) return 0;
 
@@ -117,7 +112,7 @@ int32_t input(android_app* app,AInputEvent* ev){
   float x=AMotionEvent_getX(ev,0);
   float y=AMotionEvent_getY(ev,0);
 
-  int cw=ANativeWindow_getWidth(gWindow)/3;
+  int cw=ANativeWindow_getWidth(window)/3;
 
   for(int i=0;i<apps.size();i++){
    int r=i/3,c=i%3;
@@ -128,12 +123,23 @@ int32_t input(android_app* app,AInputEvent* ev){
     launch(app,apps[i].pkg);
   }
  }
-
  return 1;
 }
 
 void cmd(android_app* app,int32_t c){
- if(c==APP_CMD_INIT_WINDOW) gWindow=app->window;
+ if(c==APP_CMD_INIT_WINDOW){
+  window=app->window;
+
+  if(!fontReady){
+   AAsset* a=AAssetManager_open(app->activity->assetManager,"font.ttf",0);
+   AAsset_read(a,ttf,AAsset_getLength(a));
+   AAsset_close(a);
+   stbtt_InitFont(&font,ttf,0);
+   fontReady=true;
+  }
+ }
+
+ if(c==APP_CMD_TERM_WINDOW) window=nullptr;
  if(c==APP_CMD_DESTROY) running=false;
 }
 
@@ -142,21 +148,16 @@ void android_main(android_app* app){
  app->onInputEvent=input;
  app->onAppCmd=cmd;
 
- AAsset* a=AAssetManager_open(app->activity->assetManager,"font.ttf",0);
- AAsset_read(a,ttf,AAsset_getLength(a));
- AAsset_close(a);
-
- stbtt_InitFont(&font,ttf,0);
-
  while(running){
-
   int ev;
   android_poll_source* src;
 
-  while(ALooper_pollAll(gWindow?0:-1,nullptr,&ev,(void**)&src)>=0)
+  while(ALooper_pollAll(0,nullptr,&ev,(void**)&src)>=0){
    if(src) src->process(app,src);
+   if(app->destroyRequested) return;
+  }
 
-  draw();
+  if(window) draw();
   usleep(16000);
  }
 }
