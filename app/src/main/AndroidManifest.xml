@@ -6,7 +6,7 @@
     android:icon="@mipmap/ic_launcher">
 
     <activity
-        android:name="android.app.NativeActivity"
+        android:name=".TextActivity"
         android:exported="true">
 
         <meta-data
