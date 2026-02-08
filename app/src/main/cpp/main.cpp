@@ -1,5 +1,4 @@
 #include <android_native_app_glue.h>
-#include <android/native_activity.h>
 #include <android/native_window.h>
 #include <android/log.h>
 #include <android/input.h>
@@ -16,14 +15,9 @@ struct AppItem {
 };
 
 std::vector<AppItem> apps = {
-    {"Chrome"},
-    {"YouTube"},
-    {"WhatsApp"},
-    {"PlayStore"},
-    {"ChatGPT"},
-    {"Settings"},
-    {"MGYoutube"},
-    {"Files"}
+    {"Chrome"}, {"YouTube"}, {"WhatsApp"},
+    {"PlayStore"}, {"ChatGPT"}, {"Settings"},
+    {"MGYoutube"}, {"Files"}
 };
 
 void draw() {
@@ -34,17 +28,16 @@ void draw() {
 
     uint32_t* pixels = (uint32_t*) buffer.bits;
 
-    // Clear screen (black)
+    // Clear screen black
     for (int y = 0; y < buffer.height; y++) {
         for (int x = 0; x < buffer.width; x++) {
             pixels[y * buffer.stride + x] = 0xFF000000;
         }
     }
 
-    // Draw simple white blocks as grid placeholders
     int cols = 3;
     int cellW = buffer.width / cols;
-    int cellH = 200;
+    int cellH = 220;
 
     for (int i = 0; i < apps.size(); i++) {
         int row = i / cols;
@@ -53,8 +46,8 @@ void draw() {
         int startX = col * cellW + 20;
         int startY = row * cellH + 40;
 
-        for (int y = startY; y < startY + 60; y++) {
-            for (int x = startX; x < startX + cellW - 40; x++) {
+        for (int y = startY; y < startY + 100 && y < buffer.height; y++) {
+            for (int x = startX; x < startX + cellW - 40 && x < buffer.width; x++) {
                 pixels[y * buffer.stride + x] = 0xFFFFFFFF;
             }
         }
@@ -63,10 +56,34 @@ void draw() {
     ANativeWindow_unlockAndPost(window);
 }
 
+int32_t handle_input(struct android_app* app, AInputEvent* event) {
+    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
+        float x = AMotionEvent_getX(event, 0);
+        float y = AMotionEvent_getY(event, 0);
+        LOGI("Touch: %f %f", x, y);
+        return 1;
+    }
+    return 0;
+}
+
 void handle_cmd(struct android_app* app, int32_t cmd) {
-    if (cmd == APP_CMD_INIT_WINDOW) {
-        window = app->window;
-        draw();
+    switch (cmd) {
+        case APP_CMD_INIT_WINDOW:
+            window = app->window;
+
+            ANativeWindow_setBuffersGeometry(
+                window,
+                0,
+                0,
+                WINDOW_FORMAT_RGBA_8888
+            );
+
+            draw();
+            break;
+
+        case APP_CMD_TERM_WINDOW:
+            window = nullptr;
+            break;
     }
 }
 
@@ -74,6 +91,7 @@ void android_main(struct android_app* state) {
     app_dummy();
 
     state->onAppCmd = handle_cmd;
+    state->onInputEvent = handle_input;
 
     int events;
     struct android_poll_source* source;
@@ -84,6 +102,6 @@ void android_main(struct android_app* state) {
         }
 
         if (window) draw();
-        usleep(16000); // ~60fps
+        usleep(16000);
     }
 }
