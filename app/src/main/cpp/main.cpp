@@ -3,14 +3,18 @@
 
 #include <android_native_app_glue.h>
 #include <android/log.h>
+#include <jni.h>
 #include <unistd.h>
 #include <vector>
 #include <string>
 #include <fstream>
 
-static ANativeWindow* window = nullptr;
-static bool running = true;
-static bool fontReady = false;
+#define LOG(...) __android_log_print(ANDROID_LOG_INFO,"NativeLauncher",__VA_ARGS__)
+
+static ANativeWindow* window=nullptr;
+static bool running=true;
+static bool fontReady=false;
+static bool loaded=false;
 
 stbtt_fontinfo font;
 unsigned char ttf[1<<20];
@@ -22,6 +26,27 @@ struct App{
 
 std::vector<App> apps;
 
+// ================= PERMISSION =================
+
+void requestPerm(android_app* app){
+
+ JNIEnv* e;
+ app->activity->vm->AttachCurrentThread(&e,nullptr);
+
+ jclass c=e->GetObjectClass(app->activity->clazz);
+
+ jmethodID m=e->GetMethodID(c,"requestPermissions","([Ljava/lang/String;I)V");
+
+ jobjectArray arr=e->NewObjectArray(
+ 1,
+ e->FindClass("java/lang/String"),
+ e->NewStringUTF("android.permission.READ_EXTERNAL_STORAGE"));
+
+ e->CallVoidMethod(app->activity->clazz,m,arr,0);
+
+ app->activity->vm->DetachCurrentThread();
+}
+
 // ================= LOAD setting.txt =================
 
 void loadApps(){
@@ -29,24 +54,37 @@ void loadApps(){
  apps.clear();
 
  std::ifstream f("/sdcard/setting.txt");
- if(!f.is_open()) return;
 
- std::string line;
+ if(f.is_open()){
+  std::string line;
 
- while(std::getline(f,line)){
-  if(line.empty()) continue;
+  while(std::getline(f,line)){
+   if(line.empty()) continue;
 
-  size_t p=line.find('|');
-  if(p==std::string::npos) continue;
+   size_t p=line.find('|');
+   if(p==std::string::npos) continue;
 
-  App a;
-  a.name=line.substr(0,p);
-  a.pkg=line.substr(p+1);
+   apps.push_back({
+    line.substr(0,p),
+    line.substr(p+1)
+   });
+  }
 
-  apps.push_back(a);
+  f.close();
  }
 
- f.close();
+ // fallback
+ if(apps.empty()){
+  LOG("setting.txt kosong, pakai default");
+
+  apps={
+   {"Settings","com.android.settings"},
+   {"Files","com.android.documentsui"},
+   {"Chrome","com.android.chrome"}
+  };
+ }
+
+ LOG("Apps loaded: %d",(int)apps.size());
 }
 
 // ================= DRAW TEXT =================
@@ -66,9 +104,7 @@ void drawText(uint32_t* p,int w,int x,int y,const char* t){
   int x0,y0,x1,y1;
   stbtt_GetCodepointBitmapBox(&font,*t,s,s,&x0,&y0,&x1,&y1);
 
-  int bw=x1-x0;
-  int bh=y1-y0;
-
+  int bw=x1-x0,bh=y1-y0;
   if(bw<=0||bh<=0){ t++; continue; }
 
   std::vector<unsigned char> b(bw*bh);
@@ -84,7 +120,7 @@ void drawText(uint32_t* p,int w,int x,int y,const char* t){
  }
 }
 
-// ================= DRAW UI =================
+// ================= DRAW =================
 
 void draw(){
 
@@ -111,13 +147,13 @@ void draw(){
    for(int x=sx;x<sx+cw-40;x++)
     p[y*buf.stride+x]=0xffffffff;
 
-  drawText(p,buf.stride,sx+15,sy+150,apps[i].name.c_str());
+  drawText(p,buf.stride,sx+10,sy+150,apps[i].name.c_str());
  }
 
  ANativeWindow_unlockAndPost(window);
 }
 
-// ================= LAUNCH APP =================
+// ================= LAUNCH =================
 
 void launch(android_app* app,const char* pkg){
 
@@ -140,7 +176,6 @@ void launch(android_app* app,const char* pkg){
   e->CallVoidMethod(app->activity->clazz,st,it);
  }
 
- e->DeleteLocalRef(j);
  app->activity->vm->DetachCurrentThread();
 }
 
@@ -160,9 +195,7 @@ int32_t input(android_app* app,AInputEvent* ev){
 
   for(int i=0;i<apps.size();i++){
 
-   int r=i/3;
-   int c=i%3;
-
+   int r=i/3,c=i%3;
    int sx=c*cw+20;
    int sy=r*220+40;
 
@@ -183,14 +216,16 @@ void cmd(android_app* app,int32_t c){
   window=app->window;
 
   if(!fontReady){
-
    AAsset* a=AAssetManager_open(app->activity->assetManager,"font.ttf",0);
-   if(a){
-    AAsset_read(a,ttf,AAsset_getLength(a));
-    AAsset_close(a);
-    stbtt_InitFont(&font,ttf,0);
-    fontReady=true;
-   }
+   AAsset_read(a,ttf,AAsset_getLength(a));
+   AAsset_close(a);
+   stbtt_InitFont(&font,ttf,0);
+   fontReady=true;
+  }
+
+  if(!loaded){
+   loadApps();
+   loaded=true;
   }
  }
 
@@ -202,7 +237,7 @@ void cmd(android_app* app,int32_t c){
 
 void android_main(android_app* app){
 
- loadApps();
+ requestPerm(app);
 
  app->onInputEvent=input;
  app->onAppCmd=cmd;
