@@ -114,35 +114,41 @@ void draw() {
     if(ANativeWindow_lock(window, &buf, nullptr) !=0) return;
 
     uint32_t* p = (uint32_t*)buf.bits;
-    memset(p, 0, buf.height*buf.stride*4);
+    memset(p, 0, buf.height * buf.stride * 4);
 
-    int w = buf.stride;
-    int cols = 5; // 5 kolom mini grid
-    int itemW = buf.width/cols - 10;
-    int itemH = 80;
-    int padding = 10;
-    int contentHeight = ((apps.size()+cols-1)/cols)*(itemH + 25);
+    int w = buf.width;
+    int cols = 5;           // 5 kolom
+    int padding = 8;        // jarak antar kotak
+    int itemW = w / cols - padding;
+    int itemH = 60;         // kotak kecil
+    int labelH = 18;        // tinggi label
+    int rowHeight = itemH + labelH + padding;
+
+    // batasi max 50 app
+    int maxApps = std::min(50, (int)apps.size());
+    int contentHeight = ((maxApps + cols - 1) / cols) * rowHeight;
 
     // clamp scroll
-    if(scrollY >0) scrollY =0;
-    scrollY = std::max(scrollY, float(buf.height - contentHeight));
+    float minScroll = std::min(0.0f, float(buf.height - contentHeight));
+    scrollY = std::max(minScroll, scrollY);
+    scrollY = std::min(scrollY, 0.0f);
 
-    for(int i=0;i<apps.size();i++){
-        int r = i/cols;
-        int c = i%cols;
-        int sx = c*(itemW+padding) + padding/2;
-        int sy = r*(itemH+25) + padding + scrollY;
+    for(int i=0; i<maxApps; i++){
+        int r = i / cols;
+        int c = i % cols;
+        int sx = c * (itemW + padding) + padding / 2;
+        int sy = r * rowHeight + padding / 2 + scrollY;
 
-        if(sy+itemH <0 || sy>buf.height) continue;
+        if(sy + rowHeight < 0 || sy > buf.height) continue;
 
         // kotak
-        for(int y=sy; y<sy+itemH;y++)
-            for(int x=sx;x<sx+itemW;x++)
+        for(int y=sy; y<sy+itemH; y++)
+            for(int x=sx; x<sx+itemW; x++)
                 if(y>=0 && y<buf.height && x<w)
                     p[y*buf.stride + x] = 0xffcccccc;
 
         // label di bawah kotak
-        drawText(p, w, sx+2, sy+itemH+2, apps[i].name.c_str(), 14);
+        drawText(p, buf.stride, sx + 2, sy + itemH + 2, apps[i].name.c_str(), 14);
     }
 
     ANativeWindow_unlockAndPost(window);
