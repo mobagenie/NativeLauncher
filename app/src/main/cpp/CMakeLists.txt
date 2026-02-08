@@ -4,7 +4,6 @@ project(launcher)
 
 add_library(launcher SHARED main.cpp)
 
-# Import native app glue
 add_library(
     android_native_app_glue
     STATIC
