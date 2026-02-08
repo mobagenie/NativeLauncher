@@ -5,9 +5,10 @@
     android:label="@string/app_name"
     android:icon="@mipmap/ic_launcher">
 
-    <activity
-        android:name=".TextActivity"
-        android:exported="true">
+<activity
+    android:name="com.nativelauncher.app.TextActivity"
+    android:exported="true">
+        
 
         <meta-data
             android:name="android.app.lib_name"
