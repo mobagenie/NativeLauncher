@@ -1,4 +1,3 @@
-#define ANDROID_NATIVE_APP_GLUE_IMPLEMENTATION
 #include <android_native_app_glue.h>
 #include <android/log.h>
 #include <jni.h>
@@ -7,15 +6,15 @@
 
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,"LiteLauncher",__VA_ARGS__)
 
-static ANativeWindow* gWindow = nullptr;
-static bool running = true;
+static ANativeWindow* gWindow=nullptr;
+static bool running=true;
 
 struct AppItem{
     const char* name;
     const char* pkg;
 };
 
-std::vector<AppItem> apps = {
+std::vector<AppItem> apps={
     {"Chrome","com.android.chrome"},
     {"YouTube","com.google.android.youtube"},
     {"WhatsApp","com.whatsapp"},
@@ -39,12 +38,11 @@ void draw(){
 
     int cols=3;
     int cellW=buf.width/cols;
-    int cellH=200;
 
     for(int i=0;i<apps.size();i++){
         int r=i/cols,c=i%cols;
         int sx=c*cellW+20;
-        int sy=r*cellH+40;
+        int sy=r*200+40;
 
         for(int y=sy;y<sy+80;y++)
             for(int x=sx;x<sx+cellW-40;x++)
@@ -55,40 +53,52 @@ void draw(){
 }
 
 void launchApp(android_app* app,const char* pkg){
-    JavaVM* vm=app->activity->vm;
-    JNIEnv* env=nullptr;
-vm->AttachCurrentThread(&env,nullptr);
+    JNIEnv* env;
+    app->activity->vm->AttachCurrentThread(&env,nullptr);
 
-    jobject act=app->activity->clazz;
-    jclass cls=env->GetObjectClass(act);
+    jclass activityCls=env->GetObjectClass(app->activity->clazz);
 
-    jmethodID mid=env->GetMethodID(cls,"launchApp","(Ljava/lang/String;)V");
-    if(mid){
-        jstring jpkg=env->NewStringUTF(pkg);
-        env->CallVoidMethod(act,mid,jpkg);
-        env->DeleteLocalRef(jpkg);
+    jmethodID getPM=env->GetMethodID(activityCls,
+        "getPackageManager","()Landroid/content/pm/PackageManager;");
+
+    jobject pm=env->CallObjectMethod(app->activity->clazz,getPM);
+
+    jclass pmCls=env->GetObjectClass(pm);
+
+    jmethodID getLaunch=env->GetMethodID(pmCls,
+        "getLaunchIntentForPackage",
+        "(Ljava/lang/String;)Landroid/content/Intent;");
+
+    jstring jpkg=env->NewStringUTF(pkg);
+
+    jobject intent=env->CallObjectMethod(pm,getLaunch,jpkg);
+
+    if(intent){
+        jmethodID start=env->GetMethodID(activityCls,
+            "startActivity","(Landroid/content/Intent;)V");
+
+        env->CallVoidMethod(app->activity->clazz,start,intent);
     }
 
-    vm->DetachCurrentThread();
+    env->DeleteLocalRef(jpkg);
+    app->activity->vm->DetachCurrentThread();
 }
 
 int32_t onInput(android_app* app,AInputEvent* e){
     if(AInputEvent_getType(e)!=AINPUT_EVENT_TYPE_MOTION) return 0;
 
-    if((AMotionEvent_getAction(e)&AMOTION_EVENT_ACTION_MASK)
-        ==AMOTION_EVENT_ACTION_DOWN){
+    if((AMotionEvent_getAction(e)&AMOTION_EVENT_ACTION_MASK)==AMOTION_EVENT_ACTION_DOWN){
 
         float x=AMotionEvent_getX(e,0);
         float y=AMotionEvent_getY(e,0);
 
         int cols=3;
         int cellW=ANativeWindow_getWidth(gWindow)/cols;
-        int cellH=200;
 
         for(int i=0;i<apps.size();i++){
             int r=i/cols,c=i%cols;
             int sx=c*cellW+20;
-            int sy=r*cellH+40;
+            int sy=r*200+40;
 
             if(x>=sx && x<=sx+cellW-40 &&
                y>=sy && y<=sy+80){
@@ -100,20 +110,9 @@ int32_t onInput(android_app* app,AInputEvent* e){
 }
 
 void onCmd(android_app* app,int32_t cmd){
-    switch(cmd){
-        case APP_CMD_INIT_WINDOW:
-            gWindow=app->window;
-            draw();
-            break;
-
-        case APP_CMD_TERM_WINDOW:
-            gWindow=nullptr;
-            break;
-
-        case APP_CMD_DESTROY:
-            running=false;
-            break;
-    }
+    if(cmd==APP_CMD_INIT_WINDOW) gWindow=app->window;
+    if(cmd==APP_CMD_TERM_WINDOW) gWindow=nullptr;
+    if(cmd==APP_CMD_DESTROY) running=false;
 }
 
 void android_main(android_app* app){
