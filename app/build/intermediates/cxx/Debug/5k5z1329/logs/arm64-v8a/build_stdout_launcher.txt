@@ -2,7 +2,7 @@ ninja: Entering directory `/workspaces/NativeLauncher/app/.cxx/Debug/5k5z1329/ar
 [1/4] Building C object CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o
 [2/4] Linking C static library libandroid_native_app_glue.a
 [3/4] Building CXX object CMakeFiles/launcher.dir/main.cpp.o
-/workspaces/NativeLauncher/app/src/main/cpp/main.cpp:74:5: warning: 'app_dummy' is deprecated: Calls to app_dummy are no longer necessary. See https://github.com/android-ndk/ndk/issues/381. [-Wdeprecated-declarations]
+/workspaces/NativeLauncher/app/src/main/cpp/main.cpp:91:5: warning: 'app_dummy' is deprecated: Calls to app_dummy are no longer necessary. See https://github.com/android-ndk/ndk/issues/381. [-Wdeprecated-declarations]
     app_dummy();
     ^
 /home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.h:338:5: note: 'app_dummy' has been explicitly marked deprecated here
