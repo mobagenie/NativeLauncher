@@ -1,0 +1,7 @@
+com.native.launcher.app-pngs-0 /workspaces/NativeLauncher/app/build/generated/res/pngs/debug
+com.native.launcher.app-resValues-1 /workspaces/NativeLauncher/app/build/generated/res/resValues/debug
+com.native.launcher.app-packageDebugResources-2 /workspaces/NativeLauncher/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+com.native.launcher.app-packageDebugResources-3 /workspaces/NativeLauncher/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+com.native.launcher.app-merged_res-4 /workspaces/NativeLauncher/app/build/intermediates/merged_res/debug
+com.native.launcher.app-debug-5 /workspaces/NativeLauncher/app/src/debug/res
+com.native.launcher.app-main-6 /workspaces/NativeLauncher/app/src/main/res
