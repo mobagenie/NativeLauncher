@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.native.launcher.app-mergeDebugResources-2:/values/values.xml",
+            "outputFile": "com.nativelauncher.app-mergeDebugResources-2:/values/values.xml",
             "map": [
                 {
                     "source": "/workspaces/NativeLauncher/app/src/main/res/values/strings.xml",

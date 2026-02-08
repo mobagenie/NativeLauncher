@@ -1,6 +1,6 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="com.native.launcher" >
+3    package="com.nativelauncher.app" >
 4
 5    <uses-sdk
 5-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:5-73

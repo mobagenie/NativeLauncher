@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.native.launcher.app-merged_res-4:/values_values.arsc.flat",
+            "outputFile": "com.nativelauncher.app-merged_res-4:/values_values.arsc.flat",
             "map": [
                 {
                     "source": "/workspaces/NativeLauncher/app/src/main/res/values/strings.xml",

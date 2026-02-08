@@ -1,1 +1,1 @@
-com.native.launcher:string/app_name = 0x7f010000
+com.nativelauncher.app:string/app_name = 0x7f010000

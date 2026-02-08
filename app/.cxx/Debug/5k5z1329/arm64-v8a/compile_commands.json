@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/workspaces/NativeLauncher/app/.cxx/Debug/5k5z1329/arm64-v8a",
+  "command": "/home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android21 --sysroot=/home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dlauncher_EXPORTS -I/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++17 -Os -fno-exceptions -fno-rtti -fno-limit-debug-info  -fPIC -o CMakeFiles/launcher.dir/main.cpp.o -c /workspaces/NativeLauncher/app/src/main/cpp/main.cpp",
+  "file": "/workspaces/NativeLauncher/app/src/main/cpp/main.cpp"
+},
+{
+  "directory": "/workspaces/NativeLauncher/app/.cxx/Debug/5k5z1329/arm64-v8a",
+  "command": "/home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android21 --sysroot=/home/codespace/android-sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o -c /home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c",
+  "file": "/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c"
+}
+]

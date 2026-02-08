@@ -1,0 +1,12 @@
+# ninja log v5
+2	30	1770532415262873830	build.ninja	31de8df29c8c8f5c
+0	1	0	clean	e90b4e32024f220
+1	115	1770532415465873828	CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o	eaf8766dd1273509
+117	168	1770532415512873828	libandroid_native_app_glue.a	bc364ee1ea992385
+0	381	1770532415731873827	CMakeFiles/launcher.dir/main.cpp.o	ce482696e8f75b98
+381	483	1770532415833873826	/workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so	65f4a6c02fc56e1c
+0	3	0	clean	e90b4e32024f220
+2	113	1770532567649872864	CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o	eaf8766dd1273509
+113	136	1770532567672872864	libandroid_native_app_glue.a	bc364ee1ea992385
+1	470	1770532568008872862	CMakeFiles/launcher.dir/main.cpp.o	ce482696e8f75b98
+471	508	1770532568047872861	/workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so	65f4a6c02fc56e1c

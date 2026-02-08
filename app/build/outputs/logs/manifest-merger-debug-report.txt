@@ -3,7 +3,6 @@ manifest
 ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-32:12
 INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-32:12
 	package
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:2:5-34
 		INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:11-69

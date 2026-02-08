@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace "com.native.launcher"
+    namespace "com.nativelauncher.app"
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.native.launcher"
+        applicationId "com.nativelauncher.app"
         minSdk 21
         targetSdk 34
 
