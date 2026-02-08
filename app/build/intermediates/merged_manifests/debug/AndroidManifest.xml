@@ -11,19 +11,20 @@
         android:extractNativeLibs="true"
         android:hasCode="true"
         android:label="LiteLauncher" >
-
-        <!-- HARUS MainActivity bukan NativeActivity -->
         <activity
-            android:name="com.nativelauncher.app.MainActivity"
+            android:name="android.app.NativeActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:label="LiteLauncher"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
+
+            <!-- Nama library native -->
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="launcher" />
 
+            <!-- Launcher sebagai HOME -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
