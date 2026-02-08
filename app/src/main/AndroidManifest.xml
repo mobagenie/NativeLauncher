@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nativelauncher.app">
 
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34"/>
 
@@ -7,19 +8,17 @@
         android:hasCode="true">
 
         <activity
-            android:name="android.app.NativeActivity"
+            android:name="com.nativelauncher.app.MainActivity"
             android:label="LiteLauncher"
             android:launchMode="singleTask"
             android:exported="true"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait">
 
-            <!-- Nama library native -->
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="launcher" />
 
-            <!-- Launcher sebagai HOME -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.HOME"/>

@@ -6,17 +6,17 @@ import android.util.Log;
 
 public class MainActivity extends NativeActivity {
 
-    // Method ini akan dipanggil dari C++ via JNI
-    public void launchApp(String packageName) {
+    // Dipanggil dari JNI
+    public void launchApp(String pkg) {
         try {
-            Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
-            if (intent != null) {
+            Intent intent = getPackageManager().getLaunchIntentForPackage(pkg);
+            if(intent != null) {
                 startActivity(intent);
             } else {
-                Log.i("LiteLauncher", "App not installed: " + packageName);
+                Log.i("LiteLauncher","App not installed: " + pkg);
             }
-        } catch (Exception e) {
-            Log.e("LiteLauncher", "Launch failed", e);
+        } catch(Exception e){
+            Log.e("LiteLauncher","Launch failed", e);
         }
     }
 }

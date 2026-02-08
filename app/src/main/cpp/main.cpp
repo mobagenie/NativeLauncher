@@ -27,42 +27,6 @@ std::vector<AppItem> apps = {
     {"Files", "com.android.documentsui"}
 };
 
-// ---------------- BITMAP FONT 8x8 ----------------
-// Hanya huruf kapital A-Z dan simbol spasi
-static const uint8_t font8x8[][8] = {
-    {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}, // space
-    {0x18,0x3C,0x3C,0x18,0x18,0x00,0x18,0x00}, // !
-    // Tambahkan huruf A-Z disini jika mau
-};
-
-// Simple draw character 8x8
-void drawChar(uint32_t* pixels, int stride, int x, int y, char c, uint32_t color) {
-    if(c == ' ') return;
-    const uint8_t* bitmap = font8x8[0]; // default space
-    int fx = c - 'A' + 1; // misal A=1
-    if(fx >= 0 && fx < 26) bitmap = font8x8[fx];
-
-    for(int row=0; row<8; row++){
-        for(int col=0; col<8; col++){
-            if(bitmap[row] & (1 << col)){
-                int px = x + col;
-                int py = y + row;
-                pixels[py * stride + px] = color;
-            }
-        }
-    }
-}
-
-// Draw string
-void drawText(uint32_t* pixels, int stride, int x, int y, const char* str, uint32_t color){
-    int cx = x;
-    while(*str){
-        drawChar(pixels, stride, cx, y, *str, color);
-        cx += 8; // font width
-        str++;
-    }
-}
-
 // ---------------- DRAW ----------------
 void draw() {
     if(!window) return;
@@ -83,27 +47,23 @@ void draw() {
     for(int i=0;i<apps.size();i++){
         int row = i / cols;
         int col = i % cols;
-        int startX = col * cellW + 20;
-        int startY = row * cellH + 40;
+        int startX = col*cellW+20;
+        int startY = row*cellH+40;
 
         // kotak putih
         for(int y=startY;y<startY+60;y++)
             for(int x=startX;x<startX+cellW-40;x++)
                 pixels[y*buffer.stride+x] = 0xFFFFFFFF;
-
-        // text nama app (putih)
-        drawText(pixels, buffer.stride, startX, startY+70, apps[i].name, 0xFFFFFFFF);
     }
 
     ANativeWindow_unlockAndPost(window);
 }
 
-// ---------------- LAUNCH APP VIA JNI ----------------
+// ---------------- JNI LAUNCH ----------------
 void launchAppJNI(android_app* app, const char* pkg){
     JavaVM* vm = app->activity->vm;
     JNIEnv* env;
-
-    if(vm->AttachCurrentThread(&env, nullptr) != JNI_OK) return;
+    if(vm->AttachCurrentThread(&env,nullptr) != JNI_OK) return;
 
     jobject activity = app->activity->clazz;
     jclass cls = env->GetObjectClass(activity);
@@ -137,6 +97,7 @@ void handle_input(android_app* app, AInputEvent* event){
 
                 if(x>=startX && x<=startX+cellW-40 &&
                    y>=startY && y<=startY+60){
+                    LOGI("Launching app: %s", apps[i].pkg);
                     launchAppJNI(app, apps[i].pkg);
                 }
             }
@@ -144,7 +105,7 @@ void handle_input(android_app* app, AInputEvent* event){
     }
 }
 
-// ---------------- APP CMD ----------------
+// ---------------- CMD ----------------
 void handle_cmd(android_app* app, int32_t cmd){
     if(cmd == APP_CMD_INIT_WINDOW){
         window = app->window;
@@ -154,8 +115,6 @@ void handle_cmd(android_app* app, int32_t cmd){
 
 // ---------------- ANDROID MAIN ----------------
 void android_main(android_app* state){
-    app_dummy();
-
     state->onAppCmd = handle_cmd;
     state->onInputEvent = [](android_app* app, AInputEvent* event)->int32_t{
         handle_input(app,event);
@@ -170,6 +129,6 @@ void android_main(android_app* state){
             if(source) source->process(state,source);
 
         if(window) draw();
-        usleep(16000); // 60fps
+        usleep(16000); // ~60fps
     }
 }

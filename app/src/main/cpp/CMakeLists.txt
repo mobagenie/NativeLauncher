@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.22.1)
-
 project(launcher)
 
+# Library utama
 add_library(launcher SHARED main.cpp)
 
+# Native app glue
 add_library(
     android_native_app_glue
     STATIC
@@ -15,6 +16,7 @@ target_include_directories(
     ${ANDROID_NDK}/sources/android/native_app_glue
 )
 
+# Library sistem
 find_library(log-lib log)
 find_library(android-lib android)
 
