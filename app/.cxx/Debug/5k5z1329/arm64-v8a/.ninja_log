@@ -17,3 +17,8 @@
 151	166	1770537590501794980	libandroid_native_app_glue.a	bc364ee1ea992385
 2	429	1770537590764794962	CMakeFiles/launcher.dir/main.cpp.o	ce482696e8f75b98
 429	4177	1770537594510794695	/workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so	65f4a6c02fc56e1c
+0	3	0	clean	e90b4e32024f220
+7	160	1770537795812780393	CMakeFiles/android_native_app_glue.dir/home/codespace/android-sdk/ndk/25.1.8937393/sources/android/native_app_glue/android_native_app_glue.c.o	eaf8766dd1273509
+160	176	1770537795834780391	libandroid_native_app_glue.a	bc364ee1ea992385
+3	405	1770537796062780375	CMakeFiles/launcher.dir/main.cpp.o	ce482696e8f75b98
+405	427	1770537796084780373	/workspaces/NativeLauncher/app/build/intermediates/cxx/Debug/5k5z1329/obj/arm64-v8a/liblauncher.so	65f4a6c02fc56e1c
