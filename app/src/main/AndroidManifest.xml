@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+   >
 
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34"/>
 
@@ -6,8 +7,9 @@
         android:label="LiteLauncher"
         android:hasCode="true">
 
+        <!-- HARUS MainActivity bukan NativeActivity -->
         <activity
-            android:name="android.app.NativeActivity"
+            android:name=".MainActivity"
             android:label="LiteLauncher"
             android:launchMode="singleTask"
             android:exported="true"
@@ -27,5 +29,4 @@
         </activity>
 
     </application>
-
 </manifest>

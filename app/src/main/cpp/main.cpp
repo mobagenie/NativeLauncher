@@ -1,4 +1,5 @@
 #include <android_native_app_glue.h>
+#include <android/native_activity.h>
 #include <android/native_window.h>
 #include <android/log.h>
 #include <android/input.h>
@@ -9,22 +10,24 @@
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, "LiteLauncher", __VA_ARGS__)
 
 static ANativeWindow* window = nullptr;
-static int selectedIndex = -1;
 
 struct AppItem {
     std::string name;
+    std::string pkg;
 };
 
 std::vector<AppItem> apps = {
-    {"Chrome"},
-    {"YouTube"},
-    {"WhatsApp"},
-    {"PlayStore"},
-    {"ChatGPT"},
-    {"Settings"},
-    {"MGYoutube"},
-    {"Files"}
+    {"Chrome", "com.android.chrome"},
+    {"YouTube", "com.google.android.youtube"},
+    {"WhatsApp", "com.whatsapp"},
+    {"PlayStore", "com.android.vending"},
+    {"ChatGPT", "com.openai.chatgpt"},
+    {"Settings", "com.android.settings"},
+    {"Files", "com.android.documentsui"}
 };
+
+// Untuk touch
+int touchX = -1, touchY = -1;
 
 void draw() {
     if (!window) return;
@@ -34,120 +37,96 @@ void draw() {
 
     uint32_t* pixels = (uint32_t*) buffer.bits;
 
-    int width  = buffer.width;
-    int height = buffer.height;
-
     // Clear screen (black)
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
+    for (int y = 0; y < buffer.height; y++)
+        for (int x = 0; x < buffer.width; x++)
             pixels[y * buffer.stride + x] = 0xFF000000;
-        }
-    }
 
     int cols = 3;
-    int cellW = width / cols;
-    int cellH = 220;
+    int cellW = buffer.width / cols;
+    int cellH = 200;
 
     for (int i = 0; i < apps.size(); i++) {
-
         int row = i / cols;
         int col = i % cols;
-
         int startX = col * cellW + 20;
         int startY = row * cellH + 40;
 
-        uint32_t color =
-            (i == selectedIndex) ?
-            0xFFFF4444 :      // merah kalau dipilih
-            0xFFFFFFFF;       // putih normal
+        // kotak putih
+        for (int y = startY; y < startY + 60; y++)
+            for (int x = startX; x < startX + cellW - 40; x++)
+                pixels[y * buffer.stride + x] = 0xFFFFFFFF;
 
-        for (int y = startY; y < startY + 100; y++) {
-            if (y >= height) continue;
-
-            for (int x = startX; x < startX + cellW - 40; x++) {
-                if (x >= width) continue;
-
-                pixels[y * buffer.stride + x] = color;
-            }
-        }
+        // TODO: Text rendering nanti via JNI atau bitmap
     }
 
     ANativeWindow_unlockAndPost(window);
 }
 
-int32_t handle_input(struct android_app* app, AInputEvent* event) {
+// Panggil method launchApp di MainActivity via JNI
+void launchAppJNI(android_app* app, const char* pkg) {
+    JNIEnv* env = app->activity->env;
+    jobject activity = app->activity->clazz;
 
-    if (AInputEvent_getType(event) != AINPUT_EVENT_TYPE_MOTION)
-        return 0;
+    jclass cls = env->GetObjectClass(activity);
+    jmethodID mid = env->GetMethodID(cls, "launchApp", "(Ljava/lang/String;)V");
+    if (mid == nullptr) return;
 
-    int action = AMotionEvent_getAction(event);
+    jstring jpkg = env->NewStringUTF(pkg);
+    env->CallVoidMethod(activity, mid, jpkg);
+    env->DeleteLocalRef(jpkg);
+}
 
-    if ((action & AMOTION_EVENT_ACTION_MASK) != AMOTION_EVENT_ACTION_DOWN)
-        return 0;
+void handle_input(android_app* app, AInputEvent* event) {
+    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
+        int action = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
+        if (action == AMOTION_EVENT_ACTION_DOWN) {
+            float x = AMotionEvent_getX(event, 0);
+            float y = AMotionEvent_getY(event, 0);
 
-    float x = AMotionEvent_getX(event, 0);
-    float y = AMotionEvent_getY(event, 0);
+            int cols = 3;
+            int cellH = 200;
+            int cellW = ANativeWindow_getWidth(window) / cols;
 
-    LOGI("Touch: %f %f", x, y);
+            for (int i = 0; i < apps.size(); i++) {
+                int row = i / cols;
+                int col = i % cols;
+                int startX = col * cellW + 20;
+                int startY = row * cellH + 40;
 
-    if (!window) return 0;
+                if (x >= startX && x <= startX + cellW - 40 &&
+                    y >= startY && y <= startY + 60) {
+                    launchAppJNI(app, apps[i].pkg.c_str());
+                }
+            }
+        }
+    }
+}
 
-    int width = ANativeWindow_getWidth(window);
-
-    int cols = 3;
-    int cellW = width / cols;
-    int cellH = 220;
-
-    int col = (int)(x / cellW);
-    int row = (int)(y / cellH);
-
-    int index = row * cols + col;
-
-    if (index >= 0 && index < apps.size()) {
-        selectedIndex = index;
-        LOGI("Clicked: %s", apps[index].name.c_str());
+void handle_cmd(android_app* app, int32_t cmd) {
+    if (cmd == APP_CMD_INIT_WINDOW) {
+        window = app->window;
         draw();
     }
-
-    return 1;
 }
 
-void handle_cmd(struct android_app* app, int32_t cmd) {
-
-    switch (cmd) {
-
-        case APP_CMD_INIT_WINDOW:
-            window = app->window;
-            draw();
-            break;
-
-        case APP_CMD_TERM_WINDOW:
-            window = nullptr;
-            break;
-    }
-}
-
-void android_main(struct android_app* state) {
-
+void android_main(android_app* state) {
     app_dummy();
 
     state->onAppCmd = handle_cmd;
-    state->onInputEvent = handle_input;
+    state->onInputEvent = [](android_app* app, AInputEvent* event) -> int32_t {
+        handle_input(app, event);
+        return 1;
+    };
 
     int events;
     struct android_poll_source* source;
 
     while (true) {
+        while (ALooper_pollAll(0, NULL, &events, (void**)&source) >= 0)
+            if (source) source->process(state, source);
 
-        while (ALooper_pollAll(-1, NULL, &events, (void**)&source) >= 0) {
-            if (source)
-                source->process(state, source);
-
-            if (state->destroyRequested != 0)
-                return;
-        }
-
-        if (window)
-            draw();
+        if (window) draw();
+        usleep(16000);
     }
 }
