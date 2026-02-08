@@ -9,10 +9,9 @@
     <application
         android:debuggable="true"
         android:extractNativeLibs="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name="com.nativelauncher.app.TextActivity"
+            android:name="android.app.NativeActivity"
             android:exported="true" >
             <meta-data
                 android:name="android.app.lib_name"
