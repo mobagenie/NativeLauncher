@@ -7,7 +7,7 @@
 7        android:targetSdkVersion="34" />
 8
 9    <application
-9-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-24:15
+9-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-25:15
 10        android:debuggable="true"
 11        android:extractNativeLibs="true"
 12        android:icon="@mipmap/ic_launcher"
@@ -15,30 +15,30 @@
 13        android:label="@string/app_name" >
 13-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:5:5-37
 14        <activity
-14-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:8:5-22:16
+14-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:8:1-23:16
 15            android:name="com.nativelauncher.app.TextActivity"
-15-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:9:9-37
+15-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:9:5-55
 16            android:exported="true" >
-16-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:10:9-32
+16-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:10:5-28
 17            <meta-data
-17-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:12:9-14:39
+17-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:13:9-15:39
 18                android:name="android.app.lib_name"
-18-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:13:13-48
+18-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:14:13-48
 19                android:value="launcher" />
-19-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:14:13-37
+19-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:15:13-37
 20
 21            <intent-filter>
-21-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:16:9-20:25
+21-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:9-21:25
 22                <action android:name="android.intent.action.MAIN" />
-22-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:13-64
-22-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:21-62
+22-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:13-64
+22-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:21-62
 23
 24                <category android:name="android.intent.category.HOME" />
-24-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:13-68
-24-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:23-66
+24-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:13-68
+24-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:23-66
 25                <category android:name="android.intent.category.DEFAULT" />
-25-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:13-71
-25-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:23-69
+25-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:20:13-71
+25-->/workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:20:23-69
 26            </intent-filter>
 27        </activity>
 28    </application>

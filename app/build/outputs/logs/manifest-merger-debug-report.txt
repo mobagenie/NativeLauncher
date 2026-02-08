@@ -1,15 +1,15 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-25:12
-INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-25:12
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-26:12
+INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:1-26:12
 	package
 		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:2:5-37
 		INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:1:11-69
 application
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-24:15
-INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-24:15
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-25:15
+INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-25:15
 	android:extractNativeLibs
 		INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml
 	android:label
@@ -17,31 +17,31 @@ INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:4:1-24
 	android:icon
 		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:6:5-39
 activity#com.nativelauncher.app.TextActivity
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:8:5-22:16
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:8:1-23:16
 	android:exported
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:10:9-32
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:10:5-28
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:9:9-37
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:9:5-55
 meta-data#android.app.lib_name
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:12:9-14:39
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:13:9-15:39
 	android:value
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:14:13-37
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:15:13-37
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:13:13-48
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:14:13-48
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.DEFAULT+category:name:android.intent.category.HOME
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:16:9-20:25
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:9-21:25
 action#android.intent.action.MAIN
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:13-64
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:13-64
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:17:21-62
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:21-62
 category#android.intent.category.HOME
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:13-68
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:13-68
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:18:23-66
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:23-66
 category#android.intent.category.DEFAULT
-ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:13-71
+ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:20:13-71
 	android:name
-		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:19:23-69
+		ADDED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml:20:23-69
 uses-sdk
 INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /workspaces/NativeLauncher/app/src/main/AndroidManifest.xml
