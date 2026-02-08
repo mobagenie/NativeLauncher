@@ -1,133 +1,162 @@
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "stb_truetype.h"
+
 #include <android_native_app_glue.h>
 #include <android/log.h>
-#include <jni.h>
 #include <unistd.h>
 #include <vector>
-
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO,"LiteLauncher",__VA_ARGS__)
 
 static ANativeWindow* gWindow=nullptr;
 static bool running=true;
 
-struct AppItem{
+stbtt_fontinfo font;
+unsigned char ttf[1<<20];
+
+struct App{
     const char* name;
     const char* pkg;
 };
 
-std::vector<AppItem> apps={
-    {"Chrome","com.android.chrome"},
-    {"YouTube","com.google.android.youtube"},
-    {"WhatsApp","com.whatsapp"},
-    {"PlayStore","com.android.vending"},
-    {"ChatGPT","com.openai.chatgpt"},
-    {"Settings","com.android.settings"},
-    {"Files","com.android.documentsui"}
+std::vector<App> apps={
+ {"Chrome","com.android.chrome"},
+ {"YouTube","com.google.android.youtube"},
+ {"WhatsApp","com.whatsapp"},
+ {"PlayStore","com.android.vending"},
+ {"ChatGPT","com.openai.chatgpt"},
+ {"Settings","com.android.settings"},
+ {"Files","com.android.documentsui"}
 };
 
+void drawText(uint32_t* p,int w,int x,int y,const char* t){
+
+ float s=stbtt_ScaleForPixelHeight(&font,32);
+ int cx=x;
+
+ while(*t){
+  int ax,l;
+  stbtt_GetCodepointHMetrics(&font,*t,&ax,&l);
+
+  int x0,y0,x1,y1;
+  stbtt_GetCodepointBitmapBox(&font,*t,s,s,&x0,&y0,&x1,&y1);
+
+  int bw=x1-x0,bh=y1-y0;
+  std::vector<unsigned char> b(bw*bh);
+
+  stbtt_MakeCodepointBitmap(&font,b.data(),bw,bh,bw,s,s,*t);
+
+  for(int j=0;j<bh;j++)
+   for(int i=0;i<bw;i++)
+    if(b[j*bw+i])
+     p[(y+j)*w+(cx+i)]=0xffffffff;
+
+  cx+=ax*s;
+  t++;
+ }
+}
+
 void draw(){
-    if(!gWindow) return;
 
-    ANativeWindow_Buffer buf;
-    if(ANativeWindow_lock(gWindow,&buf,nullptr)!=0) return;
+ if(!gWindow) return;
 
-    uint32_t* p=(uint32_t*)buf.bits;
+ ANativeWindow_Buffer buf;
+ if(ANativeWindow_lock(gWindow,&buf,nullptr)) return;
 
-    for(int y=0;y<buf.height;y++)
-        for(int x=0;x<buf.width;x++)
-            p[y*buf.stride+x]=0xFF000000;
+ uint32_t* p=(uint32_t*)buf.bits;
 
-    int cols=3;
-    int cellW=buf.width/cols;
+ memset(p,0,buf.height*buf.stride*4);
 
-    for(int i=0;i<apps.size();i++){
-        int r=i/cols,c=i%cols;
-        int sx=c*cellW+20;
-        int sy=r*200+40;
+ int cols=3;
+ int cw=buf.width/cols;
 
-        for(int y=sy;y<sy+80;y++)
-            for(int x=sx;x<sx+cellW-40;x++)
-                p[y*buf.stride+x]=0xFFFFFFFF;
-    }
+ for(int i=0;i<apps.size();i++){
+  int r=i/cols,c=i%cols;
+  int sx=c*cw+20;
+  int sy=r*220+40;
 
-    ANativeWindow_unlockAndPost(gWindow);
+  for(int y=sy;y<sy+120;y++)
+   for(int x=sx;x<sx+cw-40;x++)
+    p[y*buf.stride+x]=0xffffffff;
+
+  drawText(p,buf.stride,sx+15,sy+150,apps[i].name);
+ }
+
+ ANativeWindow_unlockAndPost(gWindow);
 }
 
-void launchApp(android_app* app,const char* pkg){
-    JNIEnv* env;
-    app->activity->vm->AttachCurrentThread(&env,nullptr);
+void launch(android_app* app,const char* pkg){
 
-    jclass activityCls=env->GetObjectClass(app->activity->clazz);
+ JNIEnv* e;
+ app->activity->vm->AttachCurrentThread(&e,nullptr);
 
-    jmethodID getPM=env->GetMethodID(activityCls,
-        "getPackageManager","()Landroid/content/pm/PackageManager;");
+ jclass c=e->GetObjectClass(app->activity->clazz);
 
-    jobject pm=env->CallObjectMethod(app->activity->clazz,getPM);
+ jmethodID pm=e->GetMethodID(c,"getPackageManager","()Landroid/content/pm/PackageManager;");
+ jobject m=e->CallObjectMethod(app->activity->clazz,pm);
 
-    jclass pmCls=env->GetObjectClass(pm);
+ jclass pc=e->GetObjectClass(m);
 
-    jmethodID getLaunch=env->GetMethodID(pmCls,
-        "getLaunchIntentForPackage",
-        "(Ljava/lang/String;)Landroid/content/Intent;");
+ jmethodID gi=e->GetMethodID(pc,"getLaunchIntentForPackage","(Ljava/lang/String;)Landroid/content/Intent;");
+ jstring j=e->NewStringUTF(pkg);
 
-    jstring jpkg=env->NewStringUTF(pkg);
+ jobject it=e->CallObjectMethod(m,gi,j);
 
-    jobject intent=env->CallObjectMethod(pm,getLaunch,jpkg);
+ if(it){
+  jmethodID st=e->GetMethodID(c,"startActivity","(Landroid/content/Intent;)V");
+  e->CallVoidMethod(app->activity->clazz,st,it);
+ }
 
-    if(intent){
-        jmethodID start=env->GetMethodID(activityCls,
-            "startActivity","(Landroid/content/Intent;)V");
-
-        env->CallVoidMethod(app->activity->clazz,start,intent);
-    }
-
-    env->DeleteLocalRef(jpkg);
-    app->activity->vm->DetachCurrentThread();
+ app->activity->vm->DetachCurrentThread();
 }
 
-int32_t onInput(android_app* app,AInputEvent* e){
-    if(AInputEvent_getType(e)!=AINPUT_EVENT_TYPE_MOTION) return 0;
+int32_t input(android_app* app,AInputEvent* ev){
 
-    if((AMotionEvent_getAction(e)&AMOTION_EVENT_ACTION_MASK)==AMOTION_EVENT_ACTION_DOWN){
+ if(AInputEvent_getType(ev)!=AINPUT_EVENT_TYPE_MOTION) return 0;
 
-        float x=AMotionEvent_getX(e,0);
-        float y=AMotionEvent_getY(e,0);
+ if((AMotionEvent_getAction(ev)&AMOTION_EVENT_ACTION_MASK)==AMOTION_EVENT_ACTION_DOWN){
 
-        int cols=3;
-        int cellW=ANativeWindow_getWidth(gWindow)/cols;
+  float x=AMotionEvent_getX(ev,0);
+  float y=AMotionEvent_getY(ev,0);
 
-        for(int i=0;i<apps.size();i++){
-            int r=i/cols,c=i%cols;
-            int sx=c*cellW+20;
-            int sy=r*200+40;
+  int cw=ANativeWindow_getWidth(gWindow)/3;
 
-            if(x>=sx && x<=sx+cellW-40 &&
-               y>=sy && y<=sy+80){
-                launchApp(app,apps[i].pkg);
-            }
-        }
-    }
-    return 1;
+  for(int i=0;i<apps.size();i++){
+   int r=i/3,c=i%3;
+   int sx=c*cw+20;
+   int sy=r*220+40;
+
+   if(x>=sx&&x<=sx+cw-40&&y>=sy&&y<=sy+120)
+    launch(app,apps[i].pkg);
+  }
+ }
+
+ return 1;
 }
 
-void onCmd(android_app* app,int32_t cmd){
-    if(cmd==APP_CMD_INIT_WINDOW) gWindow=app->window;
-    if(cmd==APP_CMD_TERM_WINDOW) gWindow=nullptr;
-    if(cmd==APP_CMD_DESTROY) running=false;
+void cmd(android_app* app,int32_t c){
+ if(c==APP_CMD_INIT_WINDOW) gWindow=app->window;
+ if(c==APP_CMD_DESTROY) running=false;
 }
 
 void android_main(android_app* app){
-    app->onAppCmd=onCmd;
-    app->onInputEvent=onInput;
 
-    while(running){
-        int events;
-        android_poll_source* src;
+ app->onInputEvent=input;
+ app->onAppCmd=cmd;
 
-        while(ALooper_pollAll(gWindow?0:-1,nullptr,&events,(void**)&src)>=0){
-            if(src) src->process(app,src);
-        }
+ AAsset* a=AAssetManager_open(app->activity->assetManager,"font.ttf",0);
+ AAsset_read(a,ttf,AAsset_getLength(a));
+ AAsset_close(a);
 
-        if(gWindow) draw();
-        usleep(16000);
-    }
+ stbtt_InitFont(&font,ttf,0);
+
+ while(running){
+
+  int ev;
+  android_poll_source* src;
+
+  while(ALooper_pollAll(gWindow?0:-1,nullptr,&ev,(void**)&src)>=0)
+   if(src) src->process(app,src);
+
+  draw();
+  usleep(16000);
+ }
 }
