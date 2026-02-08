@@ -2,7 +2,7 @@ name: Build Native Launcher
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build:
