@@ -1,0 +1,26 @@
+name: Build Native Launcher
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: android-actions/setup-android@v3
+
+    - name: Install NDK
+      run: sdkmanager "ndk;22.1.7171670"
+
+    - name: Build APK
+      run: ./gradlew assembleDebug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: NativeLauncher
+        path: app/build/outputs/apk/debug/*.apk
